@@ -1,0 +1,3 @@
+[submodule "dynaql"]
+	path = dynaql
+	url = https://github.com/worldline/dynaql.git
