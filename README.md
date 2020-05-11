@@ -28,7 +28,7 @@ Default endpoint: http://localhost:8081/play
 
 # Play !
 In the **playground** project you will find a sample class (Playground.java) that expose a single endpoint ("/play").
-This endpoint will execute a GraphQL query against the local server GraphQL (be sure to start the server first).
+This endpoint will execute a GraphQL query against the local GraphQL server (be sure to start the server first).
 ```java
 @Path("/play")
 public class Playground {
