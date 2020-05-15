@@ -17,7 +17,7 @@ mvn clean install
 cd dynaql-playground/server
 mvn wildfly:run
 ```
-GraphiQL UI: http://localhost:8080/graphiql
+GraphiQL UI: http://localhost:8080/graphql-ui/
 
 ## Start the playground (Quarkus)
 ```
