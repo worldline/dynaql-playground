@@ -1,5 +1,9 @@
 package model;
 
+import org.eclipse.microprofile.graphql.Input;
+import org.eclipse.microprofile.graphql.Name;
+import org.eclipse.microprofile.graphql.Query;
+
 import java.util.List;
 
 public class Profile {

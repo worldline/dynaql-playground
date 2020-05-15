@@ -8,6 +8,7 @@ import model.Event;
 import model.Person;
 import model.Profile;
 import model.Score;
+import model.ScoreCriteria;
 import org.eclipse.microprofile.graphql.DefaultValue;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
@@ -18,10 +19,11 @@ import org.eclipse.microprofile.graphql.Source;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @GraphQLApi
 public class ProfileGraphQLApi {
-    
+
     @Query("profileFull")
     @Description("Get a person's profile using the person's Id (same a the REST service)")
     public Profile getProfileFull(int personId) {
@@ -33,76 +35,80 @@ public class ProfileGraphQLApi {
         profile.setScores(scores);
         return profile;
     }
-    
+
     @Query("profile")
     @Description("Get a person's profile using the person's Id")
     public Profile getProfile(int personId) {
         Person person = personDB.getPerson(personId);
-        
+
         Profile profile = new Profile();
         profile.setId(person.getIdNumber());
         profile.setPerson(person);
-        
+
         return profile;
     }
-    
-    public List<Score> getScores(@Source Profile profile) {
+
+    public List<Score> getScores(@Source Profile profile, ScoreCriteria scoreCriteria) {
         Person person = profile.getPerson();
-        return scoreDB.getScores(person.getIdNumber());
+        return scoreDB.getScores(person.getIdNumber())
+                .stream()
+                .filter(score -> scoreCriteria.getName() != null ? score.getName().equals(scoreCriteria.getName()) : true)
+                .filter(score -> scoreCriteria.getMinValue() != null ? score.getValue() >= scoreCriteria.getMinValue() : true)
+                .collect(Collectors.toList());
     }
-    
+
     @Query("person")
-    public Person getPerson(@Name("personId") int personId){
+    public Person getPerson(@Name("personId") int personId) {
         return personDB.getPerson(personId);
     }
-    
+
     public List<Score> getScores(@Source Person person) {
         return scoreDB.getScores(person.getIdNumber());
     }
-    
+
     public List<Score> getScores2(@Source Person person) throws ScoresNotAvailableException {
         throw new ScoresNotAvailableException("Scores for person [" + person.getIdNumber() + "] is not available");
     }
-    
+
     // List Queries 
-    
+
     @Query
-    public List<Person> getPeople(){
+    public List<Person> getPeople() {
         return personDB.getPeople();
     }
-    
+
     // Mutations
-    
+
     @Mutation
-    public Person updatePerson(Person person){
-        return personDB.updatePerson(person);    
+    public Person updatePerson(Person person) {
+        return personDB.updatePerson(person);
     }
-    
+
     @Mutation
-    public Person deletePerson(int id){
-        return personDB.deletePerson(id);    
+    public Person deletePerson(int id) {
+        return personDB.deletePerson(id);
     }
-    
+
     // Complex graphs (Source of a source)
     public List<Event> getEvents(@Source Score score) {
         return eventDB.getEvents(score.getId());
     }
-    
+
     // Default values
     @Query
     public List<Person> getPersonsWithSurname(
             @DefaultValue("Kruger") String surname) {
-    
+
         return personDB.getPeopleWithSurname(surname);
     }
-    
-    @Inject 
+
+    @Inject
     private PersonDB personDB;
-    
-    @Inject 
+
+    @Inject
     private ScoreDB scoreDB;
-    
-    @Inject 
+
+    @Inject
     private EventDB eventDB;
 
 }
