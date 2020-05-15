@@ -15,14 +15,14 @@ mvn clean install
 ## Start the GraphQL server (Wildfly)
 ```
 cd dynaql-playground/server
-mvn wildfly:run
+mvn clean wildfly:run
 ```
 GraphiQL UI: http://localhost:8080/graphiql
 
 ## Start the playground (Quarkus)
 ```
 cd dynaql-playground/playground
-mvn quarkus:dev
+mvn clean quarkus:dev
 ```
 Default endpoint: http://localhost:8081/play
 
