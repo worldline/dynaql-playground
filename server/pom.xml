@@ -14,7 +14,7 @@
 
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <smallrye-graphql.version>1.0.3</smallrye-graphql.version>
+        <smallrye-graphql.version>1.0.6</smallrye-graphql.version>
     </properties>
 
     <dependencies>
